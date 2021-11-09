@@ -16,6 +16,7 @@ fun main() {
     // Se você der um get(), ele espera retorno.
     try {
         producer.send(record).get()
+        println(record)
     } catch (e: Exception) {
         e.printStackTrace();
     }
