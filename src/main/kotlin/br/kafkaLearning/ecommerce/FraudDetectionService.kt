@@ -7,6 +7,7 @@ import java.time.Duration
 
 class FraudDetectionService {
 
+    //Função chama main pra rodar separadamente.
     fun main() {
         val consumer = KafkaConsumer<String, String>(KafkaConsumerConfig().configConsumerProperties("FraudDetectionService"))
 
@@ -22,7 +23,7 @@ class FraudDetectionService {
             if (!records.isEmpty) {
                 //Consome todas as mensagens, retornando mensagem que se finge de funcionalidade + mensagem consumida
                 records.forEach {
-                    print("Checking for fraud, record: $it")
+                    println("Checking for fraud, record: $it")
                 }
             }
         }
