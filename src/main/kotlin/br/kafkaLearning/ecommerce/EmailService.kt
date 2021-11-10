@@ -3,16 +3,13 @@ package br.kafkaLearning.ecommerce
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.time.Duration
 
-
-
-class FraudDetectionService {
-
+class EmailService {
     fun main() {
-        val consumer = KafkaConsumer<String, String>(KafkaConsumerConfig().configConsumerProperties("FraudDetectionService"))
+        val consumer = KafkaConsumer<String, String>(KafkaConsumerConfig().configConsumerProperties("EmailService"))
 
         //Escuta o tópico definido. Pode escutar de vários tópicos, mas fica muito bagunçado.
         //Se trabalha com microsserviços, é muito provável que escute só um tópico.
-        consumer.subscribe(listOf("ecommerce_new_order"))
+        consumer.subscribe(listOf("ecommerce_send_email"))
 
 
         //Laço infinito: escuta para sempre
@@ -22,7 +19,7 @@ class FraudDetectionService {
             if (!records.isEmpty) {
                 //Consome todas as mensagens, retornando mensagem que se finge de funcionalidade + mensagem consumida
                 records.forEach {
-                    print("Checking for fraud, record: $it")
+                    print("Sending e-mail, message: $it")
                 }
             }
         }
