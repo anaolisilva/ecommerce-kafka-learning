@@ -14,7 +14,7 @@ fun main() {
     var i = 0
     while (i < 5) {
         //Simulando id de usuário como int pra testar a divisão entre partições.
-        val key: Int = Random.nextInt(0, 5)
+        val key: Int = Random.nextInt(0, 10)
 
         //Mensagem de exemplo
         val message = "id_user: $key, id_pedido, valor_da_compra"

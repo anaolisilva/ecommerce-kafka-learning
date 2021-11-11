@@ -7,7 +7,7 @@ import java.util.regex.Pattern
 //Função chama main pra rodar separadamente.
 fun main() {
 
-    val consumer = KafkaConsumer<String, String>(KafkaConsumerConfig().configConsumerProperties("EmailService"))
+    val consumer = KafkaConsumer<String, String>(KafkaConsumerConfig().configConsumerProperties("LogService"))
 
     //Escuta qualquer tópico que comece com ecommerce (regex).
     consumer.subscribe(Pattern.compile("ecommerce.*"))
