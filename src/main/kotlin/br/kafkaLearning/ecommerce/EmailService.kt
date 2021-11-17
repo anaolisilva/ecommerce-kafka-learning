@@ -1,27 +1,38 @@
 package br.kafkaLearning.ecommerce
 
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.time.Duration
 
 //Função chama main pra rodar separadamente.
 fun main() {
-    val consumer = KafkaConsumer<String, String>(KafkaConsumerConfig().configConsumerProperties("EmailService"))
+
+    val emailService = EmailService()
+
+    val kafkaService = KafkaConsumerConfig(emailService.javaClass.name,"ecommerce_send_email", emailService.callConsume())
+
+    val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties("EmailService"))
 
     consumer.subscribe(listOf("ecommerce_send_email"))
 
-    //Laço infinito: escuta para sempre
-    while(true){
-        val records = consumer.poll(Duration.ofSeconds(5))
-        if (!records.isEmpty) {
-            //Consome todas as mensagens, retornando mensagem que se finge de funcionalidade + mensagem consumida
-            records.forEach {
-                println("Sending e-mail, message: $it")
-            }
-        }
-    }
 
 }
 
+class EmailService : ConsumerFunction {
 
-class EmailService {
+    //Simula serviço de envio de e-mail.
+    override fun consume(record: ConsumerRecord<String, String>) {
+        println("-------------------SENDING E-MAIL-------------------")
+        println("topic: ${record.topic()}")
+        println("key: ${record.key()}")
+        println("value: ${record.value()}")
+        println("partition: ${record.partition()}")
+        println("offset: ${record.offset()}")
+    }
+
+    fun callConsume(): (ConsumerRecord<String, String>) -> Unit {
+        return {
+            consume(it)
+        }
+    }
 }
