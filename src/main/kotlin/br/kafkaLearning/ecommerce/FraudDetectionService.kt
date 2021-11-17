@@ -2,32 +2,42 @@ package br.kafkaLearning.ecommerce
 
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.time.Duration
-
+import org.apache.kafka.clients.consumer.ConsumerRecord
 
 
 //Função chama main pra rodar separadamente.
 fun main() {
-    val consumer = KafkaConsumer<String, String>(KafkaConsumerConfig().configConsumerProperties("FraudDetectionService"))
+
+    val fraudDetectionService = FraudDetectionService()
+
+    val kafkaService = KafkaConsumerConfig(fraudDetectionService.javaClass.name,"ecommerce_new_order", fraudDetectionService.callConsume())
+
+    val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(fraudDetectionService.javaClass.name))
 
     //Escuta o tópico definido. Pode escutar de vários tópicos, mas fica muito bagunçado.
     //Se trabalha com microsserviços, é muito provável que escute só um tópico.
     consumer.subscribe(listOf("ecommerce_new_order"))
 
-
-    //Laço infinito: escuta para sempre
-    while(true){
-        //Por que criar essaFraudDetectionService variável dentor do laço? Qual a função dela?
-        val records = consumer.poll(Duration.ofSeconds(5))
-        if (!records.isEmpty) {
-            //Consome todas as mensagens, retornando mensagem que se finge de funcionalidade + mensagem consumida
-            records.forEach {
-                println("Checking for fraud, record: $it")
-            }
-        }
-    }
+    kafkaService.run()
 
 }
 
 
-class FraudDetectionService {
+class FraudDetectionService : ConsumerFunction {
+
+    //Simula serviço de envio de checar fraudes.
+    override fun consume(record: ConsumerRecord<String, String>) {
+        println("-------------------Checking for fraud-------------------")
+        println("topic: ${record.topic()}")
+        println("key: ${record.key()}")
+        println("value: ${record.value()}")
+        println("partition: ${record.partition()}")
+        println("offset: ${record.offset()}")
+    }
+
+    fun callConsume(): (ConsumerRecord<String, String>) -> Unit {
+        return {
+            consume(it)
+        }
+    }
 }

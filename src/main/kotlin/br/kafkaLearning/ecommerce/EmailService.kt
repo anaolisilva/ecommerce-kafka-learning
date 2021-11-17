@@ -15,6 +15,7 @@ fun main() {
 
     consumer.subscribe(listOf("ecommerce_send_email"))
 
+    kafkaService.run()
 
 }
 
