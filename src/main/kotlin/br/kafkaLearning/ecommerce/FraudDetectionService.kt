@@ -1,7 +1,6 @@
 package br.kafkaLearning.ecommerce
 
-import org.apache.kafka.clients.consumer.KafkaConsumer
-import java.time.Duration
+
 import org.apache.kafka.clients.consumer.ConsumerRecord
 
 
@@ -11,16 +10,15 @@ fun main() {
     val fraudDetectionService = FraudDetectionService()
     val kafkaService = KafkaConsumerConfig(fraudDetectionService.javaClass.name,"ecommerce_new_order", fraudDetectionService.callConsume())
 
-    val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(fraudDetectionService.javaClass.name))
-
+    //Código abaixo usado antes do refatoramento.
+    //val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(fraudDetectionService.javaClass.name))
     //Escuta o tópico definido. Pode escutar de vários tópicos, mas fica muito bagunçado.
     //Se trabalha com microsserviços, é muito provável que escute só um tópico.
-    consumer.subscribe(listOf("ecommerce_new_order"))
+    //consumer.subscribe(listOf("ecommerce_new_order"))
 
     kafkaService.run()
 
 }
-
 
 class FraudDetectionService : ConsumerFunction {
 

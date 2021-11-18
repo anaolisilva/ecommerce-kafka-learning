@@ -1,15 +1,10 @@
 package br.kafkaLearning.ecommerce
 
-import org.apache.kafka.clients.producer.KafkaProducer
-import org.apache.kafka.clients.producer.ProducerConfig
-import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.serialization.StringSerializer
-import java.util.*
 import kotlin.random.Random
 
 //Vai produzir mensagem do Kafka (Producer). No pique do Kafka mock.
 fun main() {
-    val producer = KafkaProducer<String, String>(KafkaProducerConfig().properties())
+    val producer = KafkaProducerConfig()
 
     var i = 0
     while (i < 5) {
@@ -17,28 +12,20 @@ fun main() {
         val key: Int = Random.nextInt(0, 10)
 
         //Mensagem de exemplo
-        val message = "id_user: $key, id_pedido, valor_da_compra"
-        val record = ProducerRecord("ecommerce_new_order", key.toString(), message)
-
+        val messageOrder = "id_user: $key, id_pedido, valor_da_compra"
         val email = "Thank you for your purchase. We're processing your order."
-        val emailRecord = ProducerRecord("ecommerce_send_email", key.toString(), email)
 
-        //Produtor envia mensagem (record). Send não é síncrono, ele devolve um future.
-        // Se você der um get(), ele espera retorno.
+        //Pré-refatoramento: definia uma mensagem para cada um (abstraído abaixo)
+        //val record = ProducerRecord("ecommerce_new_order", key.toString(), message)
+        //val emailRecord = ProducerRecord("ecommerce_send_email", key.toString(), email)
 
-        try {
-            producer.send(record).get()
-            producer.send(emailRecord).get()
-            println(record)
-            println(emailRecord)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        //Manda mensagem de novo pedido
+        producer.send("ecommerce_new_order", key.toString(), messageOrder)
+        //Manda mensagem de novo e-mail
+        producer.send("ecommerce_send_email", key.toString(), email)
         i++
     }
-
 }
 
 class NewOrder {
-
 }
