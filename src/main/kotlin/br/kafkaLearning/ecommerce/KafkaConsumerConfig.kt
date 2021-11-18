@@ -24,6 +24,10 @@ class KafkaConsumerConfig(
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java.name)
 
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId)
+        properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString())
+
+        //Define consumo de mensagens para desde o início.
+        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
         //Auto-commita apenas uma mensagem por vez com a config dessa propriedade.
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1")
@@ -39,7 +43,7 @@ class KafkaConsumerConfig(
         while(true){
             val records = consumer.poll(Duration.ofSeconds(5))
             if (!records.isEmpty) {
-                println("Encontrei ${records.count()} registros. Processando...")
+                println("Encontrei ${records.count()} registro(s). Processando...")
                 //Consome todas as mensagens, retornando mensagem que se finge de funcionalidade + mensagem consumida
                 records.forEach {
                     consume(it)
