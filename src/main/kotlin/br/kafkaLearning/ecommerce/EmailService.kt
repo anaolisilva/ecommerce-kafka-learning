@@ -6,17 +6,10 @@ import java.time.Duration
 
 //Função chama main pra rodar separadamente.
 fun main() {
-
     val emailService = EmailService()
-
     val kafkaService = KafkaConsumerConfig(emailService.javaClass.name,"ecommerce_send_email", emailService.callConsume())
 
-    val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties("EmailService"))
-
-    consumer.subscribe(listOf("ecommerce_send_email"))
-
     kafkaService.run()
-
 }
 
 class EmailService : ConsumerFunction {
@@ -29,6 +22,8 @@ class EmailService : ConsumerFunction {
         println("value: ${record.value()}")
         println("partition: ${record.partition()}")
         println("offset: ${record.offset()}")
+        println("----------------------------------------------------")
+        println()
     }
 
     fun callConsume(): (ConsumerRecord<String, String>) -> Unit {

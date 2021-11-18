@@ -9,7 +9,7 @@ import org.apache.kafka.common.serialization.StringDeserializer
 
 class KafkaConsumerConfig(
     groupId: String,
-    topic: String,
+    val topic: String,
     val consume: ((consumerRecord: ConsumerRecord<String, String>) -> Unit)
 ) {
     private val consumer = KafkaConsumer<String, String>(configConsumerProperties(groupId))
@@ -32,6 +32,9 @@ class KafkaConsumerConfig(
     }
 
     fun run() {
+
+        consumer.subscribe(listOf(topic))
+
         //Laço infinito: escuta para sempre
         while(true){
             val records = consumer.poll(Duration.ofSeconds(5))

@@ -9,7 +9,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 fun main() {
 
     val fraudDetectionService = FraudDetectionService()
-
     val kafkaService = KafkaConsumerConfig(fraudDetectionService.javaClass.name,"ecommerce_new_order", fraudDetectionService.callConsume())
 
     val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(fraudDetectionService.javaClass.name))
@@ -33,6 +32,8 @@ class FraudDetectionService : ConsumerFunction {
         println("value: ${record.value()}")
         println("partition: ${record.partition()}")
         println("offset: ${record.offset()}")
+        println("--------------------------------------------------------")
+        println()
     }
 
     fun callConsume(): (ConsumerRecord<String, String>) -> Unit {

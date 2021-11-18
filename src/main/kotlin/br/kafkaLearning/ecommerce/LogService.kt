@@ -10,7 +10,7 @@ fun main() {
 
     val logService = LogService()
 
-    val kafkaService = KafkaConsumerConfig(logService.javaClass.name,"ecommerce_new_order", logService.callConsume())
+    val kafkaService = KafkaConsumerConfig(logService.javaClass.name, "ecommerce_new_order", logService.callConsume())
 
     val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(logService.javaClass.name))
 
@@ -31,6 +31,8 @@ class LogService : ConsumerFunction {
         println("value: ${record.value()}")
         println("partition: ${record.partition()}")
         println("offset: ${record.offset()}")
+        println("------------------------------------------------------------------")
+        println()
     }
 
     fun callConsume(): (ConsumerRecord<String, String>) -> Unit {
