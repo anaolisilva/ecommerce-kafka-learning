@@ -2,17 +2,25 @@ package br.kafkaLearning.ecommerce
 
 import java.time.Duration
 import java.util.*
+import java.util.regex.Pattern
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
 
-class KafkaConsumerConfig(
+class KafkaConsumerConfig (
     groupId: String,
-    val topic: String,
-    val consume: ((consumerRecord: ConsumerRecord<String, String>) -> Unit)
+    val consume: (consumerRecord: ConsumerRecord<String, String>) -> Unit
 ) {
     private val consumer = KafkaConsumer<String, String>(configConsumerProperties(groupId))
+
+    constructor(groupId: String, topic: String, consume: (consumerRecord: ConsumerRecord<String, String>) -> Unit) : this(groupId,  consume) {
+        consumer.subscribe(listOf(topic))
+    }
+
+    constructor(groupId: String, topic: Pattern, consume: (consumerRecord: ConsumerRecord<String, String>) -> Unit) : this(groupId, consume){
+        consumer.subscribe(topic)
+    }
 
     fun configConsumerProperties(groupId: String) : Properties {
         //Configura propriedades do consumidor.
@@ -36,8 +44,6 @@ class KafkaConsumerConfig(
     }
 
     fun run() {
-
-        consumer.subscribe(listOf(topic))
 
         //Laço infinito: escuta para sempre
         while(true){

@@ -21,7 +21,7 @@ fun main() {
 
         //Mensagem de exemplo (pré-refactor)
         //val messageOrder = "id_user: $userId, id_pedido, valor_da_compra"
-        val email = "Thank you for your purchase. We're processing your order."
+        val email = "Thank you for your purchase. We are processing your order."
 
         //Cria um objeto Order, com os dados que eu preciso (evento)
         val order = Order(userId, orderId, total)

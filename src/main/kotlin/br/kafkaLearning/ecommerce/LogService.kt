@@ -10,7 +10,7 @@ fun main() {
 
     val logService = LogService()
 
-    val kafkaService = KafkaConsumerConfig(logService.javaClass.name, "ecommerce_new_order", logService.callConsume())
+    val kafkaService = KafkaConsumerConfig(logService.javaClass.name, Pattern.compile("ecommerce.*"), logService.callConsume())
 
     val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(logService.javaClass.name))
 
