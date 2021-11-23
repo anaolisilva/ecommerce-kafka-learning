@@ -1,6 +1,7 @@
 package br.kafkaLearning.ecommerce
 
 
+import br.kafkaLearning.ecommerce.Model.Order
 import org.apache.kafka.clients.consumer.ConsumerRecord
 
 
@@ -8,7 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 fun main() {
 
     val fraudDetectionService = FraudDetectionService()
-    val kafkaService = KafkaConsumerConfig<Order>(fraudDetectionService.javaClass.name,"ecommerce_new_order", fraudDetectionService.callConsume())
+    val kafkaService = KafkaConsumerConfig<Order>(fraudDetectionService.javaClass.name,"ecommerce_new_order", fraudDetectionService.callConsume(), Order::class.java)
 
     //Código abaixo usado antes do refatoramento.
     //val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(fraudDetectionService.javaClass.name))

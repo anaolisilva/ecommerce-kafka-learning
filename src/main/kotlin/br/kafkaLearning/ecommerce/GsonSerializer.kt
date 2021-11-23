@@ -9,9 +9,7 @@ class GsonSerializer<T> : Serializer<T>{
 
     val gson: Gson = GsonBuilder().create()
 
-
     override fun serialize(s: String?, t: T): ByteArray {
         return gson.toJson(t).toByteArray()
     }
-
 }

@@ -28,5 +28,4 @@ class GsonDeserializer<T> : Deserializer<T> {
     companion object {
         const val TYPE_CONFIG : String = "br.kafkaLearning.ecommerce"
     }
-
 }

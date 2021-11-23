@@ -14,11 +14,11 @@ class KafkaConsumerConfig<T> (
 ) {
     private val consumer = KafkaConsumer<String, T>(configConsumerProperties(groupId))
 
-    constructor(groupId: String, topic: String, consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit) : this(groupId,  consume) {
+    constructor(groupId: String, topic: String, consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit, type: Class<T>) : this(groupId,  consume) {
         consumer.subscribe(listOf(topic))
     }
 
-    constructor(groupId: String, topic: Pattern, consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit) : this(groupId, consume){
+    constructor(groupId: String, topic: Pattern, consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit, type: Class<T>) : this(groupId, consume){
         consumer.subscribe(topic)
     }
 

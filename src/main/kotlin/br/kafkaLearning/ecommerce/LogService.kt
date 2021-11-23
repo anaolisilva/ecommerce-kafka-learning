@@ -9,18 +9,16 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 fun main() {
 
     val logService = LogService()
-
-    val kafkaService = KafkaConsumerConfig(logService.javaClass.name, Pattern.compile("ecommerce.*"), logService.callConsume())
+    val kafkaService = KafkaConsumerConfig(logService.javaClass.name, Pattern.compile("ecommerce.*"), logService.callConsume(), String::class.java)
 
     //Escuta qualquer tópico que comece com ecommerce (regex). Pré-refactoing.
     //consumer.subscribe(Pattern.compile("ecommerce.*"))
 
     kafkaService.run()
-
 }
 
 
-class LogService : ConsumerFunction {
+class LogService : ConsumerFunction<String> {
 
     //Simula serviço de envio de LOG fraudes.
     override fun consume(record: ConsumerRecord<String, String>) {

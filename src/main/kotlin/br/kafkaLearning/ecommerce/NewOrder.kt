@@ -1,13 +1,14 @@
 package br.kafkaLearning.ecommerce
 
-import java.math.BigInteger
+import br.kafkaLearning.ecommerce.Model.Email
+import br.kafkaLearning.ecommerce.Model.Order
 import java.util.UUID
 import kotlin.random.Random
 
 //Vai produzir mensagem do Kafka (Producer). No pique do Kafka mock.
 fun main() {
     val orderProducer = KafkaProducerConfig<Order>()
-    val emailProducer = KafkaProducerConfig<String>()
+    val emailProducer = KafkaProducerConfig<Email>()
 
     var i = 0
     while (i < 5) {
@@ -21,7 +22,7 @@ fun main() {
 
         //Mensagem de exemplo (pré-refactor)
         //val messageOrder = "id_user: $userId, id_pedido, valor_da_compra"
-        val email = "Thank you for your purchase. We are processing your order."
+        val email: Email = Email("Purchase","Thank you for your purchase. We are processing your order.")
 
         //Cria um objeto Order, com os dados que eu preciso (evento)
         val order = Order(userId, orderId, total)
