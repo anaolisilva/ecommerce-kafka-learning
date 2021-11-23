@@ -1,8 +1,8 @@
-package br.kafkaLearning.ecommerce
+package br.kafkaLearning.ecommerce.Model
 
 import java.math.BigInteger
 
-class Order (
+data class Order (
     val userId: Int,
     val orderId: String,
     val total: Int
