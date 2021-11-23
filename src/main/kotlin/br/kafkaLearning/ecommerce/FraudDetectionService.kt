@@ -8,7 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 fun main() {
 
     val fraudDetectionService = FraudDetectionService()
-    val kafkaService = KafkaConsumerConfig(fraudDetectionService.javaClass.name,"ecommerce_new_order", fraudDetectionService.callConsume())
+    val kafkaService = KafkaConsumerConfig<Order>(fraudDetectionService.javaClass.name,"ecommerce_new_order", fraudDetectionService.callConsume())
 
     //Código abaixo usado antes do refatoramento.
     //val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(fraudDetectionService.javaClass.name))
@@ -20,10 +20,10 @@ fun main() {
 
 }
 
-class FraudDetectionService : ConsumerFunction {
+class FraudDetectionService : ConsumerFunction<Order> {
 
     //Simula serviço de envio de checar fraudes.
-    override fun consume(record: ConsumerRecord<String, String>) {
+    override fun consume(record: ConsumerRecord<String, Order>) {
         println("-------------------Checking for fraud-------------------")
         println("topic: ${record.topic()}")
         println("key: ${record.key()}")
@@ -34,7 +34,7 @@ class FraudDetectionService : ConsumerFunction {
         println()
     }
 
-    fun callConsume(): (ConsumerRecord<String, String>) -> Unit {
+    fun callConsume(): (ConsumerRecord<String, Order>) -> Unit {
         return {
             consume(it)
         }

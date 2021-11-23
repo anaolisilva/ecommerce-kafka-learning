@@ -8,17 +8,17 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
 
-class KafkaConsumerConfig (
+class KafkaConsumerConfig<T> (
     groupId: String,
-    val consume: (consumerRecord: ConsumerRecord<String, String>) -> Unit
+    val consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit
 ) {
-    private val consumer = KafkaConsumer<String, String>(configConsumerProperties(groupId))
+    private val consumer = KafkaConsumer<String, T>(configConsumerProperties(groupId))
 
-    constructor(groupId: String, topic: String, consume: (consumerRecord: ConsumerRecord<String, String>) -> Unit) : this(groupId,  consume) {
+    constructor(groupId: String, topic: String, consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit) : this(groupId,  consume) {
         consumer.subscribe(listOf(topic))
     }
 
-    constructor(groupId: String, topic: Pattern, consume: (consumerRecord: ConsumerRecord<String, String>) -> Unit) : this(groupId, consume){
+    constructor(groupId: String, topic: Pattern, consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit) : this(groupId, consume){
         consumer.subscribe(topic)
     }
 
@@ -29,7 +29,7 @@ class KafkaConsumerConfig (
         //ConfiguraDeserializador da chave do consumer. Pode ser customizado se for o caso, ter um deserializer próprio a partir
         //do que recebe o consumidor.
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java.name)
-        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java.name)
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, GsonDeserializer::class.java.name)
 
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId)
         properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString())
@@ -39,6 +39,8 @@ class KafkaConsumerConfig (
 
         //Auto-commita apenas uma mensagem por vez com a config dessa propriedade.
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1")
+
+        properties.setProperty(GsonDeserializer.TYPE_CONFIG, String::class.java.name)
 
         return properties
     }
