@@ -12,10 +12,8 @@ fun main() {
 
     val kafkaService = KafkaConsumerConfig(logService.javaClass.name, Pattern.compile("ecommerce.*"), logService.callConsume())
 
-    val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(logService.javaClass.name))
-
-    //Escuta qualquer tópico que comece com ecommerce (regex).
-    consumer.subscribe(Pattern.compile("ecommerce.*"))
+    //Escuta qualquer tópico que comece com ecommerce (regex). Pré-refactoing.
+    //consumer.subscribe(Pattern.compile("ecommerce.*"))
 
     kafkaService.run()
 
