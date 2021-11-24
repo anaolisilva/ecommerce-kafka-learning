@@ -1,4 +1,4 @@
-package br.kafkaLearning.ecommerce
+package br.kafkaLearning.ecommerce.common.Kafka
 
 import java.time.Duration
 import java.util.*

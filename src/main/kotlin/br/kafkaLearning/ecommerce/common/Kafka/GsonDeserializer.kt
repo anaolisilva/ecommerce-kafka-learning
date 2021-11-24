@@ -1,4 +1,4 @@
-package br.kafkaLearning.ecommerce
+package br.kafkaLearning.ecommerce.common.Kafka
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -12,7 +12,7 @@ class GsonDeserializer<T> : Deserializer<T> {
 
     override fun configure(configs: MutableMap<String, *>?, isKey: Boolean) {
         //Talvez a safe call não seja a melhor maneira de chamar essa config.
-        val typeName: String = configs?.get(Companion.TYPE_CONFIG).toString()
+        val typeName: String = configs?.get(TYPE_CONFIG).toString()
 
         try {
             type = Class.forName(typeName) as Class<T>

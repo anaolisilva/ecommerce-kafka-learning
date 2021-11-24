@@ -1,4 +1,4 @@
-package br.kafkaLearning.ecommerce
+package br.kafkaLearning.ecommerce.common.Kafka
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

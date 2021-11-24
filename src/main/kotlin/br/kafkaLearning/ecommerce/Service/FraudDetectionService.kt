@@ -1,6 +1,8 @@
-package br.kafkaLearning.ecommerce
+package br.kafkaLearning.ecommerce.Service
 
 
+import br.kafkaLearning.ecommerce.common.Kafka.ConsumerFunction
+import br.kafkaLearning.ecommerce.common.Kafka.KafkaConsumerConfig
 import br.kafkaLearning.ecommerce.Model.Order
 import org.apache.kafka.clients.consumer.ConsumerRecord
 

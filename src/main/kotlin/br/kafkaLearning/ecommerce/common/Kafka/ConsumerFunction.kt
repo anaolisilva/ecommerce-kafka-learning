@@ -1,4 +1,4 @@
-package br.kafkaLearning.ecommerce
+package br.kafkaLearning.ecommerce.common.Kafka
 
 import org.apache.kafka.clients.consumer.ConsumerRecord
 

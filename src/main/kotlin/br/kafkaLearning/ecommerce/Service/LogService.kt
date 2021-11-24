@@ -1,5 +1,7 @@
-package br.kafkaLearning.ecommerce
+package br.kafkaLearning.ecommerce.Service
 
+import br.kafkaLearning.ecommerce.common.Kafka.ConsumerFunction
+import br.kafkaLearning.ecommerce.common.Kafka.KafkaConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.time.Duration
 import java.util.regex.Pattern

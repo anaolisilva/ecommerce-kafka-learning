@@ -1,5 +1,6 @@
-package br.kafkaLearning.ecommerce
+package br.kafkaLearning.ecommerce.Service
 
+import br.kafkaLearning.ecommerce.common.Kafka.KafkaProducerConfig
 import br.kafkaLearning.ecommerce.Model.Email
 import br.kafkaLearning.ecommerce.Model.Order
 import java.util.UUID
