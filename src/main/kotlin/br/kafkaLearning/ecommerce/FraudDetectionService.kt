@@ -9,7 +9,13 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 fun main() {
 
     val fraudDetectionService = FraudDetectionService()
-    val kafkaService = KafkaConsumerConfig<Order>(fraudDetectionService.javaClass.name,"ecommerce_new_order", fraudDetectionService.callConsume(), Order::class.java)
+    val kafkaService = KafkaConsumerConfig<Order>(
+        fraudDetectionService.javaClass.name,
+        "ecommerce_new_order",
+        fraudDetectionService.callConsume(),
+        Order::class.java,
+        mapOf()
+    )
 
     //Código abaixo usado antes do refatoramento.
     //val consumer = KafkaConsumer<String, String>(kafkaService.configConsumerProperties(fraudDetectionService.javaClass.name))

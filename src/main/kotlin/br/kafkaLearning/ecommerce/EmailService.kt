@@ -8,7 +8,13 @@ import java.time.Duration
 //Função chama main pra rodar separadamente.
 fun main() {
     val emailService = EmailService()
-    val kafkaService = KafkaConsumerConfig(emailService.javaClass.name,"ecommerce_send_email", emailService.callConsume(), Email::class.java)
+    val kafkaService = KafkaConsumerConfig(
+        emailService.javaClass.name,
+        "ecommerce_send_email",
+        emailService.callConsume(),
+        Email::class.java,
+        mapOf()
+    )
 
     kafkaService.run()
 }

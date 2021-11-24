@@ -3,13 +3,17 @@ package br.kafkaLearning.ecommerce
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.time.Duration
 import java.util.regex.Pattern
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
 
 //Função chama main pra rodar separadamente.
 fun main() {
-
     val logService = LogService()
-    val kafkaService = KafkaConsumerConfig(logService.javaClass.name, Pattern.compile("ecommerce.*"), logService.callConsume(), String::class.java)
+    val kafkaService = KafkaConsumerConfig(logService.javaClass.name,
+        Pattern.compile("ecommerce.*"),
+        logService.callConsume(),
+        String::class.java,
+        mapOf(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to String::class.java.name))
 
     //Escuta qualquer tópico que comece com ecommerce (regex). Pré-refactoing.
     //consumer.subscribe(Pattern.compile("ecommerce.*"))

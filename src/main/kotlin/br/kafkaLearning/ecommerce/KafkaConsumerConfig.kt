@@ -10,19 +10,34 @@ import org.apache.kafka.common.serialization.StringDeserializer
 
 class KafkaConsumerConfig<T> (
     groupId: String,
-    val consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit
+    val consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit,
+    type: Class<T>,
+    extraProperties: Map<String, String>
 ) {
-    private val consumer = KafkaConsumer<String, T>(configConsumerProperties(groupId))
+    private val consumer = KafkaConsumer<String, T>(configConsumerProperties(groupId, type, extraProperties))
 
-    constructor(groupId: String, topic: String, consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit, type: Class<T>) : this(groupId,  consume) {
+    //Não gosto muito da abordagem de colocar em tudo, mas é o que ele fez no vídeo.
+    constructor(
+        groupId: String,
+        topic: String,
+        consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit,
+        type: Class<T>,
+        extraProperties: Map<String, String>
+    ) : this(groupId,  consume, type, extraProperties) {
         consumer.subscribe(listOf(topic))
     }
 
-    constructor(groupId: String, topic: Pattern, consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit, type: Class<T>) : this(groupId, consume){
+    constructor(
+        groupId: String,
+        topic: Pattern,
+        consume: (consumerRecord: ConsumerRecord<String, T>) -> Unit,
+        type: Class<T>,
+        extraProperties: Map<String, String>
+    ) : this(groupId, consume, type, extraProperties) {
         consumer.subscribe(topic)
     }
 
-    fun configConsumerProperties(groupId: String) : Properties {
+    fun configConsumerProperties(groupId: String, type: Class<T>, extraProperties: Map<String, String>) : Properties {
         //Configura propriedades do consumidor.
         val properties = Properties()
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092")
@@ -40,7 +55,10 @@ class KafkaConsumerConfig<T> (
         //Auto-commita apenas uma mensagem por vez com a config dessa propriedade.
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1")
 
-        properties.setProperty(GsonDeserializer.TYPE_CONFIG, String::class.java.name)
+        properties.setProperty(GsonDeserializer.TYPE_CONFIG, type.name)
+
+        //Override das properties definidas no caso de passar propriedades extra.
+        properties.putAll(extraProperties)
 
         return properties
     }
