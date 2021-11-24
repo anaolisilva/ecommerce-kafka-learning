@@ -10,7 +10,7 @@ fun main() {
 
     val fraudDetectionService = FraudDetectionService()
     val kafkaService = KafkaConsumerConfig<Order>(
-        fraudDetectionService.javaClass.name,
+        fraudDetectionService::class.java.name,
         "ecommerce_new_order",
         fraudDetectionService.callConsume(),
         Order::class.java,

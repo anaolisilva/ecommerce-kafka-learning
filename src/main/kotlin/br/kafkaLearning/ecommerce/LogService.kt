@@ -5,6 +5,7 @@ import java.time.Duration
 import java.util.regex.Pattern
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.apache.kafka.common.serialization.StringDeserializer
 
 //Função chama main pra rodar separadamente.
 fun main() {
@@ -13,7 +14,7 @@ fun main() {
         Pattern.compile("ecommerce.*"),
         logService.callConsume(),
         String::class.java,
-        mapOf(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to String::class.java.name))
+        mapOf(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java.name))
 
     //Escuta qualquer tópico que comece com ecommerce (regex). Pré-refactoing.
     //consumer.subscribe(Pattern.compile("ecommerce.*"))
@@ -27,7 +28,7 @@ class LogService : ConsumerFunction<String> {
     //Simula serviço de envio de LOG fraudes.
     override fun consume(record: ConsumerRecord<String, String>) {
         println("--------------------- LOG: ${record.topic()} ---------------------")
-        println("key: " + record.key())
+        println("key (userId): ${record.key()}")
         println("value: ${record.value()}")
         println("partition: ${record.partition()}")
         println("offset: ${record.offset()}")

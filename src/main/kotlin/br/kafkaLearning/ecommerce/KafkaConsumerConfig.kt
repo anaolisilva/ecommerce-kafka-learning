@@ -50,7 +50,7 @@ class KafkaConsumerConfig<T> (
         properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString())
 
         //Define consumo de mensagens para desde o início.
-        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
+//        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
         //Auto-commita apenas uma mensagem por vez com a config dessa propriedade.
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1")

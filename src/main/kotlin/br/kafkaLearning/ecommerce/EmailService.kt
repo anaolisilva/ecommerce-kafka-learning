@@ -2,14 +2,12 @@ package br.kafkaLearning.ecommerce
 
 import br.kafkaLearning.ecommerce.Model.Email
 import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.apache.kafka.clients.consumer.KafkaConsumer
-import java.time.Duration
 
 //Função chama main pra rodar separadamente.
 fun main() {
     val emailService = EmailService()
-    val kafkaService = KafkaConsumerConfig(
-        emailService.javaClass.name,
+    val kafkaService = KafkaConsumerConfig<Email>(
+        emailService::class.java.name,
         "ecommerce_send_email",
         emailService.callConsume(),
         Email::class.java,
