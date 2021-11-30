@@ -4,6 +4,8 @@ package br.kafkaLearning.ecommerce.Service
 import br.kafkaLearning.ecommerce.common.Kafka.ConsumerFunction
 import br.kafkaLearning.ecommerce.common.Kafka.KafkaConsumerConfig
 import br.kafkaLearning.ecommerce.Model.Order
+import br.kafkaLearning.ecommerce.common.Kafka.KafkaProducerConfig
+import kotlin.random.Random
 import org.apache.kafka.clients.consumer.ConsumerRecord
 
 
@@ -41,6 +43,24 @@ class FraudDetectionService : ConsumerFunction<Order> {
         println("offset: ${record.offset()}")
         println("--------------------------------------------------------")
         println()
+
+        val order = record.value()
+        val orderProducer = KafkaProducerConfig<Order>()
+
+        if (isFraud()) {
+            println("Order is a fraud. Cancelling operation.")
+            orderProducer.send("ecommerce_order_rejected", order.userId.toString(), order)
+        } else {
+            println("Approved: $order")
+            orderProducer.send("ecommerce_order_approved", order.userId.toString(), order)
+        }
+
+    }
+
+    private fun isFraud(): Boolean {
+        //Simula chance de fraude de 25%
+        val fraudDetector = Random.nextInt(1, 100)
+        return (fraudDetector % 2 == 1 && fraudDetector < 50)
     }
 
     fun callConsume(): (ConsumerRecord<String, Order>) -> Unit {
