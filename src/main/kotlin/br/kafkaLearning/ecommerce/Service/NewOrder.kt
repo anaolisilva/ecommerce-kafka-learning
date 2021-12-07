@@ -15,7 +15,7 @@ fun main() {
     while (i < 5) {
 
         //Simulando id de usuário como int pra testar a divisão entre partições.
-        val userId: Int = Random.nextInt(0, 10)
+        val userId: Int = Random.nextInt(0, 1000)
 
         val orderId: String = UUID.randomUUID().toString()
         val total: Int = Random.nextInt(1, 5000)
