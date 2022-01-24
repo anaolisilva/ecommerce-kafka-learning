@@ -6,6 +6,7 @@ import br.kafkaLearning.ecommerce.common.Kafka.ConsumerFunction
 import br.kafkaLearning.ecommerce.common.Kafka.KafkaConsumerConfig
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.SQLException
 import java.util.UUID
 import org.apache.kafka.clients.consumer.ConsumerRecord
 
@@ -32,11 +33,16 @@ class RegisterUserService : ConsumerFunction<Order>  {
     urlDataBase: String = "jdbc:sqlite:users_database.db",
     connection: Connection = DriverManager.getConnection(urlDataBase)
     ) {
-        connection.createStatement().execute("create table Users (" +
-                "id varchar(50) primary key," +
-                "email varchar(200))")
+        try {
+            connection.createStatement().execute(
+                "create table Users (" +
+                        "id varchar(50) primary key," +
+                        "email varchar(200))"
+            )
+        } catch (ex: SQLException) {
+            ex.printStackTrace()
+        }
     }
-
     lateinit var users: User
 
     //Simula serviço de envio de checar fraudes.
@@ -48,8 +54,8 @@ class RegisterUserService : ConsumerFunction<Order>  {
         println()
         val order = record.value()
 
-        if (isNewUser(order.getEmail())) {
-            insertNew(order.getEmail())
+        if (isNewUser(order.email)) {
+            insertNewUser(order.email)
         }
 
     }
@@ -67,8 +73,9 @@ class RegisterUserService : ConsumerFunction<Order>  {
         return !result.next()
     }
 
-    fun insertNew(email: String) {
-        var statement = connection.prepareStatement("insert into Users (uuid, email) " +
+    //Id do usuário no evento e no banco de dados é diferente para testes com divisão de partições ficar mais visível.
+    fun insertNewUser(email: String) {
+        var statement = connection.prepareStatement("insert into Users (id, email) " +
                 "values (?,?)");
         statement.setString(1, UUID.randomUUID().toString());
         statement.setString(2, email);

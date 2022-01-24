@@ -19,14 +19,15 @@ fun main() {
 
         val orderId: String = UUID.randomUUID().toString()
         val total: Int = Random.nextInt(1, 5000)
+        val userEmail: String = Random.nextInt(400, 500).toString() + "@email.com"
 
 
         //Mensagem de exemplo (pré-refactor)
         //val messageOrder = "id_user: $userId, id_pedido, valor_da_compra"
-        val email: Email = Email("Purchase","Thank you for your purchase. We are processing your order.")
+        val emailBody: Email = Email("Purchase","Thank you for your purchase. We are processing your order.")
 
         //Cria um objeto Order, com os dados que eu preciso (evento)
-        val order = Order(userId, orderId, total)
+        val order = Order(userId, orderId, total, userEmail)
 
 
         //Pré-refatoramento: definia uma mensagem para cada um (abstraído abaixo)
@@ -36,7 +37,7 @@ fun main() {
         //Manda mensagem de novo pedido
         orderProducer.send("ecommerce_new_order", userId.toString(), order)
         //Manda mensagem de novo e-mail
-        emailProducer.send("ecommerce_send_email", userId.toString(), email)
+        emailProducer.send("ecommerce_send_email", userId.toString(), emailBody)
         i++
     }
 }
